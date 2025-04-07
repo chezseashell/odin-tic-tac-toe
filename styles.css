@@ -11,6 +11,7 @@
 body {
     font-family: Roboto Mono, Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
     margin:auto;
+    margin-top: 20px;
     text-align: center;
     font-size: 16px;
 }
@@ -19,8 +20,27 @@ body {
     margin: 0;
 }
 
+
+#game-outer-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: #ece9e9;
+    max-width: 130px;
+    height: 40px;
+    margin: auto;
+    margin-top:30px;
+    border-radius: 20px;
+}
+
+
+#game-outer-div div {
+align-self: center;
+}
+
 .game-content {
     margin: 0;
+    margin-top:50px;
     padding:0;
 }
 
@@ -34,14 +54,30 @@ body {
 
 }
 
+
 .tile-outer-container {
 
-    border: 2px solid orange;
-    border: 1px solid black;
+    border: 2px solid black;
     font-size: 2.5rem;
-    background-color: aquamarine;
 
 }
+
+.tile-outer-container:nth-of-type(1), .tile-outer-container:nth-of-type(2), .tile-outer-container:nth-of-type(3) {
+    border-top: 0;
+}
+.tile-outer-container:nth-of-type(7), .tile-outer-container:nth-of-type(8), .tile-outer-container:nth-of-type(9) {
+    border-bottom: 0;
+}
+.tile-outer-container:nth-of-type(1), .tile-outer-container:nth-of-type(4), .tile-outer-container:nth-of-type(7) {
+    border-left: 0;
+}
+
+.tile-outer-container:nth-of-type(3), .tile-outer-container:nth-of-type(6), .tile-outer-container:nth-of-type(9) {
+    border-right: 0;
+}
+
+
+
 
 .game-tile {
     display: flex;
