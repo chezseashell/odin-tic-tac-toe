@@ -2,6 +2,7 @@ const gameTiles = document.querySelector('#game-tiles-container');
 const playButton = document.querySelector('#play-btn');
 const gameOuterDiv = document.querySelector('#game-outer-div')
 const gameInnerDiv = document.querySelector('#game-inner-div');
+const gameContainer = document.querySelector('#game-container')
 
 let currentPlayerIndex = 0;
 let gameboardArray = []; 
@@ -63,13 +64,12 @@ function addMarkerEventListeners() {
             if (gameboardArray[tileId] === '') { // Only allow move if tile is empty
                 gameOuterDiv.innerHTML =``;
                 const currentPlayer = players[currentPlayerIndex];
-                console.log("current player " + currentPlayerIndex);
 
-                currentPlayerDiv.innerHTML = `<p>Player ${currentPlayerIndex+1}</p>`
+                currentPlayerDiv.innerHTML = `<p>Player ${currentPlayerIndex+1} Turn</p>`
                 gameOuterDiv.appendChild(currentPlayerDiv)
+                gameOuterDiv.classList.add('show');
                 
                 currentPlayer(tileElement, tileId); // Call move with tile and id
-                console.log("Current board: " + gameboardArray);
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length; 
 
                 // Check for winner
@@ -77,9 +77,48 @@ function addMarkerEventListeners() {
                 const winner = checkforWinner(xMoves, oMoves)(); 
                 if (winner) {
                     console.log("Winner: " + winner);
+                    const resetGameBtn = document.createElement('button');
+                    resetGameBtn.id = 'resetBtn';
+                    gameOuterDiv.removeChild(currentPlayerDiv);
+                    resetGameBtn.innerHTML = `Play Again`;
+                    gameOuterDiv.appendChild(resetGameBtn);
 
 
+                    const resetBtn = document.querySelector('#resetBtn');
 
+                    resetBtn.addEventListener('click', () => {
+                        gameOuterDiv.innerHTML = ``;
+                        gameOuterDiv.classList.remove('show');
+
+
+                        const winnerDiv = document.querySelector('#winnerDiv');
+                        gameInnerDiv.removeChild(winnerDiv);
+                    
+
+                        gameContainer.classList.remove('hide')
+
+                        const tiles = document.querySelectorAll('[tile-id]');
+
+                        // tiles.forEach(tile => {
+                        //     tile.textContent = '';
+                        // })
+                        gameTiles.innerHTML = ``;
+
+                        let currentPlayerIndex = 0;
+                        let gameboardArray = []; 
+                        
+                        const game2 = gameboard();
+                        game2();
+
+                        
+
+                        const player1 = player('Scott', 'X');
+                        const player2 = player('Bob', 'O');
+                        const players = [player1, player2];
+
+                        addMarkerEventListeners();
+                    })
+                
                 }
             }
         });
@@ -119,8 +158,9 @@ function checkforWinner(array1, array2) {
 
 
                 const winnerDiv = document.createElement('div');
+                winnerDiv.id = 'winnerDiv'
                 winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 1 WON!</p>`
-                gameInnerDiv.innerHTML = ``;
+                gameContainer.classList.add('hide')
                 gameInnerDiv.appendChild(winnerDiv);
 
                 return "X";
@@ -128,13 +168,16 @@ function checkforWinner(array1, array2) {
 
 
             }
+
             const oWins = combo.every(num => arrayO.includes(num));
             if (oWins) {
                 console.log("O wins with combo: " + combo);
 
                 const winnerDiv = document.createElement('div');
+                winnerDiv.id = 'winnerDiv'
                 winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 2 WON!</p>`
                 gameInnerDiv.innerHTML = ``;
+                gameContainer.classList.add('hide')
                 gameInnerDiv.appendChild(winnerDiv);
 
 

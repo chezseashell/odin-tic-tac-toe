@@ -21,20 +21,27 @@ body {
 }
 
 
-#game-outer-div {
+ .show {
     display: flex;
     justify-content: center;
     align-content: center;
     background-color: #ece9e9;
-    max-width: 130px;
+    max-width: 160px;
     height: 40px;
     margin: auto;
     margin-top:30px;
     border-radius: 20px;
 }
 
+.show button {
+    border: none;
+    font-weight: 600;
+    font-size: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+}
 
-#game-outer-div div {
+ .show > div  {
 align-self: center;
 }
 
@@ -87,6 +94,19 @@ align-self: center;
     width: 100px;
 }
 
-.hide {
-    color: transparent
+
+#game-container .hide div  {
+    display: none;
 }
+
+.hide {
+    /* border: none; */
+    height:0;
+    color: transparent;
+}
+
+.hide .tile-outer-container {
+    display: none;
+    height: 0;
+}
+
