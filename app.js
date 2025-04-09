@@ -63,6 +63,7 @@ const players = [player1, player2];
 function resetGame() {
     const currentPlayerDiv = document.querySelector('#player-div')
     const resetGameBtn = document.createElement('button');
+    
     resetGameBtn.id = 'resetBtn';
     gameOuterDiv.innerHTML = '';
     resetGameBtn.innerHTML = `Play Again`;
@@ -78,8 +79,10 @@ function resetGame() {
         gameOuterDiv.classList.remove('show');
 
 
-        const winnerDiv = document.querySelector('#winnerDiv');
-        gameInnerDiv.removeChild(winnerDiv);
+        const winnerDivs = document.querySelectorAll('#winnerDiv');
+        winnerDivs.forEach(div => {
+            div.remove() 
+        }) 
                     
 
         gameContainer.classList.remove('hide')
@@ -102,6 +105,7 @@ function resetGame() {
         const players = [player1, player2];
 
         addMarkerEventListeners();
+        
 
     })
 }
@@ -136,11 +140,17 @@ function addMarkerEventListeners() {
                 const winner = checkforWinner(xMoves, oMoves)(); 
                 if (winner) {
                     console.log("Winner: " + winner);
+
+
+                    
+                        
                     const resetGameBtn = document.createElement('button');
                     resetGameBtn.id = 'resetBtn';
                     gameOuterDiv.removeChild(currentPlayerDiv);
                     resetGameBtn.innerHTML = `Play Again`;
                     gameOuterDiv.appendChild(resetGameBtn);
+
+
 
                     resetGame();
                 }  
@@ -148,14 +158,25 @@ function addMarkerEventListeners() {
                 if (!gameboardArray.includes("") && !winner) {
                     console.log("gameboardArray full and no winner")
 
-                    const winnerDiv = document.createElement('div');
-                    winnerDiv.id = 'winnerDiv'
-                    winnerDiv.innerHTML = `<p> NO WINNER, PLAYER 1 AND 2 TIED!</p>`
-                    gameContainer.classList.add('hide')
-                    gameInnerDiv.appendChild(winnerDiv);
 
+
+                    setTimeout(function() {
+
+
+                        const winnerDiv = document.createElement('div');
+                        winnerDiv.id = 'winnerDiv'
+                        winnerDiv.innerHTML = `<p> NO WINNER, PLAYER 1 AND 2 TIED!</p>`
+                        gameContainer.classList.add('hide')
+                        gameInnerDiv.appendChild(winnerDiv);
+
+
+                    }, 1000)
+                    
                     resetGame();
+                    
                 }
+                
+
 
                 console.log("winner variable status: " + winner)
             }
@@ -196,29 +217,40 @@ function checkforWinner(array1, array2) {
             const combo = winningCombos[i];
 
             const xWins = combo.every(num => arrayX.includes(num));
+            const oWins = combo.every(num => arrayO.includes(num));
+            
             if (xWins) {
-                console.log("X wins with combo: " + combo);
+                
+                    console.log("X wins with combo: " + combo);
 
-                const winnerDiv = document.createElement('div');
-                winnerDiv.id = 'winnerDiv'
-                winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 1 WON!</p>`
-                gameContainer.classList.add('hide')
-                gameInnerDiv.appendChild(winnerDiv);
 
-                return "X";
+                    const winnerDiv = document.createElement('div');
+                    winnerDiv.id = 'winnerDiv'
+                    winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 1 WON!</p>`
+                    gameContainer.classList.add('hide')
+                    gameInnerDiv.appendChild(winnerDiv);
+                    return "X";
+                
             }
 
-            const oWins = combo.every(num => arrayO.includes(num));
+            
             if (oWins) {
-                console.log("O wins with combo: " + combo);
 
-                const winnerDiv = document.createElement('div');
-                winnerDiv.id = 'winnerDiv'
-                winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 2 WON!</p>`
-                gameContainer.classList.add('hide')
-                gameInnerDiv.appendChild(winnerDiv);
+            
+                    console.log("O wins with combo: " + combo);
 
-                return "O";
+                    const winnerDiv = document.createElement('div');
+                    winnerDiv.id = 'winnerDiv'
+                    winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 2 WON!</p>`
+                    gameContainer.classList.add('hide')
+                    gameInnerDiv.appendChild(winnerDiv);
+                    return "O";
+                    
+                
+                
+                
+                
+
             }
         }
 

@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 
+@keyframes iconDimmer {
+    0% {opacity: 100%; }
+    50% {opacity: 60%; transform: scale(1.05);}
+    100% {opacity: 100%}
+}
+
+
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -16,11 +24,12 @@ html {
     background-repeat: no-repeat;
 
 
+
 }
 body {
     font-family: Roboto Mono, Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
     margin:auto;
-    padding-top: 20px;
+    padding-top: 40px;
     text-align: center;
     font-size: 16px;
     background: radial-gradient(rgba(192, 52, 21, 0.4) 40%, rgb(0,0,0)) center / cover;
@@ -28,14 +37,17 @@ body {
     background-position:center;
     background-repeat: no-repeat;
     height:100vh;
+
 }
 
 .header {
     margin: 0;
+
 }
 
 .header h1 {
-    color: #ece9e9;
+    color: rgb(175, 184, 183);
+
 }
 
 
@@ -68,9 +80,10 @@ align-self: center;
 
 .game-content {
     margin: 0;
-    margin-top:50px;
+    margin-top:80px;
     padding:0;
 }
+
 
 #game-tiles-container {
     display: grid;
@@ -118,6 +131,10 @@ align-self: center;
     width: 100px;
 }
 
+[tile-id="0"] {
+    
+}
+
 
 #game-container .hide div  {
     display: none;
@@ -136,6 +153,8 @@ align-self: center;
 
 #resetBtn {
     background-color: transparent;
+    color: rgb(175, 184, 183);
+
 }
 
 #xIcon {
@@ -167,7 +186,30 @@ align-self: center;
     padding:10px;
     border-radius: 20px;
     font-variation-settings: "wght" 200; /* Bolder weight */
+    animation-name: iconDimmer;
+    animation-duration: 1.5s;
 
 }
 
 
+
+#winnerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(55, 13, 3);
+    background: rgba(215, 228, 227, 0.6);
+    width: 300px;
+    padding: 100px;
+    margin: auto;
+    border-radius: 20px;
+    font-size: 1.5rem;
+
+
+}
+
+
+.hideDiv {
+    display: none;
+    background-color: transparent;
+}
