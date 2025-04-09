@@ -8,29 +8,50 @@
 }
 
 
+
+html {
+    background-image: url(/images/Mars_opportunity.jpg);
+    background-size: cover;
+    background-position:center;
+    background-repeat: no-repeat;
+
+
+}
 body {
     font-family: Roboto Mono, Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
     margin:auto;
-    margin-top: 20px;
+    padding-top: 20px;
     text-align: center;
     font-size: 16px;
+    background: radial-gradient(rgba(192, 52, 21, 0.4) 40%, rgb(0,0,0)) center / cover;
+    background-size: cover;
+    background-position:center;
+    background-repeat: no-repeat;
+    height:100vh;
 }
 
 .header {
     margin: 0;
 }
 
+.header h1 {
+    color: #ece9e9;
+}
+
 
  .show {
+
+    
     display: flex;
     justify-content: center;
     align-content: center;
-    background-color: #ece9e9;
-    max-width: 160px;
+    background-color: rgba(0,0,0, 0.6);
+    max-width: 170px;
     height: 40px;
     margin: auto;
     margin-top:30px;
     border-radius: 20px;
+    color: rgb(175, 184, 183);
 }
 
 .show button {
@@ -53,8 +74,8 @@ align-self: center;
 
 #game-tiles-container {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
     justify-content: center;
     align-content: center;
     
@@ -64,8 +85,11 @@ align-self: center;
 
 .tile-outer-container {
 
-    border: 2px solid black;
-    font-size: 2.5rem;
+    border: 3px solid rgba(215, 228, 227, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 
 }
 
@@ -109,4 +133,41 @@ align-self: center;
     display: none;
     height: 0;
 }
+
+#resetBtn {
+    background-color: transparent;
+}
+
+#xIcon {
+    color: rgb(175, 184, 183);
+    background: radial-gradient(rgba(190, 72, 39, 0.35), rgba(80, 16, 2, 0.6) 80%);
+
+
+
+
+}
+
+#oIcon {
+    color: rgb(114, 43, 23);
+    background: radial-gradient(rgba(231, 192, 185, 0.35), rgba(175, 184, 183, 0.4) 80%);
+
+
+
+}
+
+.material-symbols-outlined {
+    font-variation-settings: "wght" 300; /* Default is 400, try 500, 600, or 700 for bolder */
+    font-size: 24px; /* Adjust size as needed */
+}
+/* Optional: Target specific icons */
+
+#oIcon, #xIcon {
+    font-size: 6rem;
+    font-weight:lighter;
+    padding:10px;
+    border-radius: 20px;
+    font-variation-settings: "wght" 200; /* Bolder weight */
+
+}
+
 
