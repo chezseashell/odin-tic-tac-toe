@@ -20,9 +20,14 @@ const winningCombos = [
     [2, 4, 6]
 ];
 
-function gameboard(player1, player2) {
-    return function GameboardGrid() {
-        gameboardArray = [];
+class Gameboard {
+    constructor() {
+        this.gameboardArray = [];
+    }
+
+    createGrid() {
+        this.gameboardArray = [];
+        gameTiles.innerHTML = ''
         for (let i = 0; i < 9; i++) {
             var tile = document.createElement('div');
             gameboardArray.push("");
@@ -32,11 +37,15 @@ function gameboard(player1, player2) {
         }
         console.log(gameboardArray);
         return gameboardArray;
-    };
-}   
 
-const game1 = gameboard();
-game1();
+    }
+
+
+}
+ 
+
+const game1 = new Gameboard();
+game1.createGrid();
 
 
 function player(name, markerIcon, marker) {
@@ -95,8 +104,8 @@ function resetGame() {
         let currentPlayerIndex = 0;
         let gameboardArray = []; 
                         
-        const game2 = gameboard();
-        game2();
+        const newGame = new Gameboard();
+        gameboardArray = newGame.createGrid();
 
                         
 
@@ -109,7 +118,6 @@ function resetGame() {
 
     })
 }
-
 
 
 
@@ -236,7 +244,7 @@ function checkforWinner(array1, array2) {
             
             if (oWins) {
 
-            
+                
                     console.log("O wins with combo: " + combo);
 
                     const winnerDiv = document.createElement('div');
