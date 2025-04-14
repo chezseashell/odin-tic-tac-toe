@@ -20,6 +20,7 @@ const winningCombos = [
     [2, 4, 6]
 ];
 
+
 class Gameboard {
     constructor() {
         this.gameboardArray = [];
@@ -37,36 +38,93 @@ class Gameboard {
         }
         console.log(gameboardArray);
         return gameboardArray;
-
     }
-
-
 }
  
 
-const game1 = new Gameboard();
-game1.createGrid();
+class Player {
+    constructor(playerName, markerIcon, marker) {
+        this.playerName = playerName;
+        this.markerIcon = markerIcon;
+        this.marker = marker;
+    }
 
-
-function player(name, markerIcon, marker) {
-    const playerName = name;
-    const markerChar = markerIcon;
-    const makerText = marker
-
-    
-    return function playerMove(tileSelection, tileId) {
-        tileSelection.innerHTML = `${markerChar}`;
+    makeMove(tileSelection, tileId) {
+        tileSelection.innerHTML = this.markerIcon;
         console.log("tileSelection: " + tileSelection.innerHTML);
-        gameboardArray[tileId] = marker;
-        return gameboardArray; 
-    };
+        gameboardArray[tileId] = this.marker;
+        return gameboardArray;    
+    }
 }
 
 
-const player1 = player('Scott',xIcon, 'X');
-const player2 = player('Bob', oIcon, 'O');
-const players = [player1, player2];
+class MoveConverter {
+    constructor(gameArray) {
+        this.gameArray = gameboardArray;
+    }
 
+    getMoves() {
+        const xMoves = [];
+        const oMoves = [];
+        for (let i =0; i< this.gameArray.length; i++) {
+            if (this.gameArray[i] === 'X') {
+                xMoves.push(i);
+            } else if(this.gameArray[i] === 'O') {
+                oMoves.push(i);
+            }
+        }
+        return { xMoves, oMoves };
+    }
+}
+
+
+class WinnerCheck {
+    constructor(arrayX, arrayO) {
+        this.arrayX = arrayX;
+        this.arrayO = arrayO;
+    }
+
+    checkCombos() {
+        for (let i=0; i < winningCombos.length; i ++) {
+            const combo = winningCombos[i];
+            const xWins = combo.every(num => this.arrayX.includes(num));
+            const oWins = combo.every(num => this.arrayO.includes(num));
+
+            if (xWins) {
+                console.log("X wins with combo: " + combo);
+                const winnerDiv = document.createElement('div');
+                winnerDiv.id = 'winnerDiv';
+                winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 1 WONS!</p>`;
+                gameContainer.classList.add('hide');
+                gameInnerDiv.appendChild(winnerDiv);
+                return 'X';
+            }
+
+            if (oWins) {
+                console.log("O wins with combo: " + combo);
+                const winnerDiv = document.createElement('div');
+                winnerDiv.id = 'winnerDiv';
+                winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 2 WON!</p>`;
+                gameContainer.classList.add('hide');
+                gameInnerDiv.appendChild(winnerDiv);
+                return "O";                
+            }
+        }
+        console.log("No winner yet");
+        return null;
+    }
+}
+
+
+
+
+/* Initialize game */
+const game1 = new Gameboard();
+game1.createGrid();
+
+const player1 = new Player('Scott',xIcon, 'X');
+const player2 = new Player('Bob', oIcon, 'O');
+const players = [player1, player2];
 
 
 function resetGame() {
@@ -78,7 +136,6 @@ function resetGame() {
     resetGameBtn.innerHTML = `Play Again`;
     gameOuterDiv.appendChild(resetGameBtn);
 
-
     const resetBtn = document.querySelector('#resetBtn');
 
     resetBtn.addEventListener('click', () => {
@@ -89,36 +146,20 @@ function resetGame() {
 
 
         const winnerDivs = document.querySelectorAll('#winnerDiv');
-        winnerDivs.forEach(div => {
-            div.remove() 
-        }) 
+        winnerDivs.forEach(div => div.remove() ) 
                     
-
         gameContainer.classList.remove('hide')
-
-        const tiles = document.querySelectorAll('[tile-id]');
-
-           
         gameTiles.innerHTML = ``;
 
-        let currentPlayerIndex = 0;
-        let gameboardArray = []; 
+        currentPlayerIndex = 0;
+        gameboardArray = []; 
                         
         const newGame = new Gameboard();
         gameboardArray = newGame.createGrid();
 
-                        
-
-        const player1 = player('Scott',xIcon, 'X');
-        const player2 = player('Bob', oIcon, 'O');
-        const players = [player1, player2];
-
         addMarkerEventListeners();
-        
-
     })
 }
-
 
 
 function addMarkerEventListeners() {
@@ -130,7 +171,6 @@ function addMarkerEventListeners() {
 
             const currentPlayerDiv = document.createElement('div');
 
-
             if (gameboardArray[tileId] === '') { // Only allow move if tile is empty
                 gameOuterDiv.innerHTML =``;
                 const currentPlayer = players[currentPlayerIndex];
@@ -140,25 +180,23 @@ function addMarkerEventListeners() {
                 gameOuterDiv.appendChild(currentPlayerDiv)
                 gameOuterDiv.classList.add('show');
                 
-                currentPlayer(tileElement, tileId); // Call move with tile and id
+                currentPlayer.makeMove(tileElement, tileId); // Call move with tile and id
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length; 
 
                 // Check for winner
-                const { xMoves, oMoves } = convertArray(gameboardArray)(); 
-                const winner = checkforWinner(xMoves, oMoves)(); 
+                const moveConverter = new MoveConverter(gameboardArray);
+                const { xMoves, oMoves } = moveConverter.getMoves(); 
+                const winnerChecker = new WinnerCheck(xMoves, oMoves);
+                const winner = winnerChecker.checkCombos();
+
                 if (winner) {
                     console.log("Winner: " + winner);
-
-
-                    
-                        
+                               
                     const resetGameBtn = document.createElement('button');
                     resetGameBtn.id = 'resetBtn';
                     gameOuterDiv.removeChild(currentPlayerDiv);
                     resetGameBtn.innerHTML = `Play Again`;
                     gameOuterDiv.appendChild(resetGameBtn);
-
-
 
                     resetGame();
                 }  
@@ -166,26 +204,16 @@ function addMarkerEventListeners() {
                 if (!gameboardArray.includes("") && !winner) {
                     console.log("gameboardArray full and no winner")
 
-
-
                     setTimeout(function() {
-
-
                         const winnerDiv = document.createElement('div');
                         winnerDiv.id = 'winnerDiv'
                         winnerDiv.innerHTML = `<p> NO WINNER, PLAYER 1 AND 2 TIED!</p>`
                         gameContainer.classList.add('hide')
                         gameInnerDiv.appendChild(winnerDiv);
 
-
-                    }, 1000)
-                    
-                    resetGame();
-                    
+                    }, 1000)                   
+                    resetGame(); 
                 }
-                
-
-
                 console.log("winner variable status: " + winner)
             }
         });
@@ -193,81 +221,4 @@ function addMarkerEventListeners() {
 }
 
 
-
-
-function convertArray(gameArray) {
-    const arrayToConvert = gameArray;
-
-    return function moves() {
-        const xMoves = [];
-        const oMoves = [];
-
-        for (let i = 0; i < arrayToConvert.length; i++) {
-            if (arrayToConvert[i] === 'X') {
-                xMoves.push(i);
-            } else if (arrayToConvert[i] === 'O') {
-                oMoves.push(i);  
-            } 
-        }
-        return { xMoves, oMoves }; // Return both arrays as an object
-    };
-}
-
-
-
-
-function checkforWinner(array1, array2) {
-    const arrayX = array1;
-    const arrayO = array2;
-
-    return function checkcombos() {
-        for (let i = 0; i < winningCombos.length; i++) { 
-            const combo = winningCombos[i];
-
-            const xWins = combo.every(num => arrayX.includes(num));
-            const oWins = combo.every(num => arrayO.includes(num));
-            
-            if (xWins) {
-                
-                    console.log("X wins with combo: " + combo);
-
-
-                    const winnerDiv = document.createElement('div');
-                    winnerDiv.id = 'winnerDiv'
-                    winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 1 WON!</p>`
-                    gameContainer.classList.add('hide')
-                    gameInnerDiv.appendChild(winnerDiv);
-                    return "X";
-                
-            }
-
-            
-            if (oWins) {
-
-                
-                    console.log("O wins with combo: " + combo);
-
-                    const winnerDiv = document.createElement('div');
-                    winnerDiv.id = 'winnerDiv'
-                    winnerDiv.innerHTML = `<p> CONGRATULATIONS, PLAYER 2 WON!</p>`
-                    gameContainer.classList.add('hide')
-                    gameInnerDiv.appendChild(winnerDiv);
-                    return "O";
-                    
-                
-                
-                
-                
-
-            }
-        }
-
-        console.log("No winner yet");
-
-        return null; 
-    };
-}
-
-
 addMarkerEventListeners();
-
